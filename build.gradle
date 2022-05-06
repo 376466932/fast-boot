@@ -1,22 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.6.7'
+    }
+}
+
 plugins {
-	id 'org.springframework.boot' version '2.6.7'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.fast'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 repositories {
-	mavenCentral()
+    mavenLocal()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') {
+def env = System.getProperty("env", "dev")
+
+String configFile = "application-${env}.yml"
+
+import org.apache.tools.ant.filters.ReplaceTokens
+processResources {
+    doFirst {
+        filter ReplaceTokens, tokens: [configFile: configFile]
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            resources.matching { include 'application-*.yml' }.forEach({
+                if (! (configFile == it.getName())) {
+                    println "exclude config file ${it.getName()}"
+                    exclude it.getName()
+                }
+            })
+        }
+    }
+}
+
+test {
 	useJUnitPlatform()
 }

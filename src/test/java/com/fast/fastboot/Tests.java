@@ -3,11 +3,12 @@ package com.fast.fastboot;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class FastBootApplicationTests {
-
+//@SpringBootTest
+public class Tests {
 	@Test
-	void contextLoads() {
+	public void test() {
+		System.out.println("=================TEST");
 	}
+
 
 }
