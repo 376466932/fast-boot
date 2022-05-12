@@ -1,6 +1,5 @@
 package com.fast.fastboot.common.exception;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 
 @Getter
