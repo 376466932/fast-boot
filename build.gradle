@@ -17,13 +17,25 @@ targetCompatibility = '11'
 
 repositories {
     mavenLocal()
+    maven {
+        url 'https://maven.aliyun.com/repository/public/'
+    }
     mavenCentral()
 }
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter"
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'com.alibaba:fastjson:2.0.2'
+
+
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
 }
 
 def env = System.getProperty("env", "dev")
