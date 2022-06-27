@@ -12,15 +12,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RestResult<T> implements Serializable {
 
-    private T data;
-
-    private int code;
-
-    private String message;
-
     private static final int SUCCESS_CODE = 1;
     private static final int SYSTEM_ERROR_CODE = 500;
-
+    private T data;
+    private int code;
+    private String message;
 
     public static <T> RestResult<T> success(T data) {
         return new RestResult<T>(data, SUCCESS_CODE, null);

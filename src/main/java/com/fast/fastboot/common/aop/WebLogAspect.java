@@ -10,13 +10,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 @Aspect
 @Component
@@ -27,9 +24,11 @@ public class WebLogAspect {
     @Pointcut("execution(* com.fast.fastboot.controller..*.*(..)))")
     public void controller() {
     }
+
     @Pointcut("execution(* com.fast.fastboot.controller.common.ExceptionHandleController.*(..))")
     public void exclude() {
     }
+
     @Pointcut("controller() && !exclude()")
     public void aspectLog() {
     }
@@ -39,15 +38,6 @@ public class WebLogAspect {
         //get request and response
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        HttpServletResponse response = attributes.getResponse();
-        //generate request id
-        String xRequestId = request.getHeader(Constants.X_REQUEST_ID_HEADER_NAME);
-        if (! StringUtils.hasText(xRequestId)) {
-            xRequestId = UUID.randomUUID().toString().replaceAll("-", "");
-        }
-        //set the request id to response and MDC
-        response.setHeader(Constants.X_REQUEST_ID_HEADER_NAME, xRequestId);
-        MDC.put(Constants.X_REQUEST_ID_HEADER_NAME, xRequestId);
 
         String uri = request.getRequestURI();
         Object[] args = pjp.getArgs();
@@ -68,14 +58,8 @@ public class WebLogAspect {
             throw e;
         } finally {
             long end = System.currentTimeMillis();
-            log.info("complete request, uri: {}, success: {}, response time: {}", uri, success, end - start);
+            log.info("complete request, uri: {}, success: {}, responseTime: {}", uri, success, end - start);
         }
     }
-
-    @After("aspectLog()")
-    public void afterAdvice() {
-        MDC.remove(Constants.X_REQUEST_ID_HEADER_NAME);
-    }
-
 
 }

@@ -1,2 +1,6 @@
 config:
   testValue: "dev"
+
+
+logback:
+  localLevel: DEBUG

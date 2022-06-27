@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property value="fast-boot" name="service"/>
+    <property value="/opt/log/stash/${service}/${HOSTNAME}" name="path"/>
+    <springProperty scope="context" name="localLevel" source="logback.localLevel"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %p (%thread-%class:%line\) %X{x_request_id} - %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="logstash" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${path}/${service}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${path}/${service}-%d{yyyy-MM-dd}-%i.gz</FileNamePattern>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <MaxHistory>10</MaxHistory>
+            <MaxFileSize>50MB</MaxFileSize>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"service": "${service}"}</customFields>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="logstash"/>
+    </root>
+
+    <logger name="com.fast.fastboot" level="${localLevel}"/>
+    <logger name="org.apache.kafka" level="WARN"/>
+</configuration>

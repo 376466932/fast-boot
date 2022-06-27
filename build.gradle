@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'com.alibaba:fastjson:2.0.2'
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.1.1'
 
 
 
@@ -35,7 +36,6 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
-
 }
 
 def env = System.getProperty("env", "dev")
@@ -43,6 +43,7 @@ def env = System.getProperty("env", "dev")
 String configFile = "application-${env}.yml"
 
 import org.apache.tools.ant.filters.ReplaceTokens
+
 processResources {
     doFirst {
         filter ReplaceTokens, tokens: [configFile: configFile]
@@ -53,7 +54,7 @@ sourceSets {
     main {
         resources {
             resources.matching { include 'application-*.yml' }.forEach({
-                if (! (configFile == it.getName())) {
+                if (!(configFile == it.getName())) {
                     println "exclude config file ${it.getName()}"
                     exclude it.getName()
                 }
@@ -63,5 +64,5 @@ sourceSets {
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

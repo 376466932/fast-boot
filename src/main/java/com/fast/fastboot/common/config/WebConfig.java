@@ -3,9 +3,11 @@ package com.fast.fastboot.common.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.fast.fastboot.common.interceptor.RequestIdInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ import java.util.List;
 public class WebConfig extends WebMvcConfigurationSupport {
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(fastJsonCreate());
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RequestIdInterceptor()).addPathPatterns("/**");
     }
 
     public static FastJsonHttpMessageConverter fastJsonCreate() {
@@ -42,6 +44,11 @@ public class WebConfig extends WebMvcConfigurationSupport {
         fastMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
         return fastJsonHttpMessageConverter;
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(fastJsonCreate());
     }
 
 

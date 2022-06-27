@@ -17,7 +17,7 @@ public class ExceptionHandleController {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public RestResult<Object> errorHandler(HttpServletRequest request,
-                                           HttpServletResponse response, Exception e)throws Exception {
+                                           HttpServletResponse response, Exception e) throws Exception {
 
         return RestResult.systemError(e.getMessage());
     }
@@ -25,7 +25,7 @@ public class ExceptionHandleController {
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
     public RestResult<Object> errorHandler(HttpServletRequest request,
-                                           HttpServletResponse response, BusinessException e){
+                                           HttpServletResponse response, BusinessException e) {
 
         return RestResult.error(e);
     }

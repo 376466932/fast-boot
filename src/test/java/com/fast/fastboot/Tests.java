@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 
 //@SpringBootTest
 public class Tests {
-	@Test
-	public void test() {
-		System.out.println(JSON.toJSONString(ErrorCode.PERMISSION_DENIED));
-	}
+    @Test
+    public void test() {
+        System.out.println(JSON.toJSONString(ErrorCode.PERMISSION_DENIED));
+    }
 
 
 }
