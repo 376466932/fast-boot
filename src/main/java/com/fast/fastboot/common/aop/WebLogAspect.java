@@ -1,14 +1,11 @@
 package com.fast.fastboot.common.aop;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fast.fastboot.common.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -52,7 +49,7 @@ public class WebLogAspect {
         boolean success = true;
         try {
             return pjp.proceed();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             success = false;
             log.error(e.getMessage(), e);
             throw e;
